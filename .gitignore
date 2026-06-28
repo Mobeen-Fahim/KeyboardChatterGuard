@@ -28,3 +28,6 @@ Desktop.ini
 
 # App Config local files
 config.json
+
+# Executables
+*.exe
