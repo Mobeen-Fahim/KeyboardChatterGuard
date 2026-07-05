@@ -47,6 +47,29 @@ namespace KeyboardChatterGuard
         {
             InitializeComponent();
 
+            // Set window icon dynamically from the running executable's embedded Win32 icon
+            try
+            {
+                string? exePath = Environment.ProcessPath;
+                if (!string.IsNullOrEmpty(exePath) && System.IO.File.Exists(exePath))
+                {
+                    using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(exePath))
+                    {
+                        if (icon != null)
+                        {
+                            this.Icon = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                                icon.Handle,
+                                Int32Rect.Empty,
+                                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to load window icon: {ex.Message}");
+            }
+
             // Set up collections
             LstConsoleLogs.ItemsSource = _consoleLogs;
             LstKeyboards.ItemsSource = _keyboards;
